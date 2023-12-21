@@ -968,6 +968,31 @@ extern "C" {
 #else /* _MSC_VER */
 int main(int argc, char **argv)
 {
+
+#ifdef SLIC3R_GUI
+    std::cout << "With SLIC3R_GUI...\n";
+#else
+    std::cout << "Without SLIC3R_GUI...\n";
+#endif
+
+#if ENABLE_GL_CORE_PROFILE
+    std::cout << "With ENABLE_GL_CORE_PROFILE...\n";
+#else
+    std::cout << "Without ENABLE_GL_CORE_PROFILE...\n";
+#endif
+
+#if ENABLE_OPENGL_DEBUG_OPTION
+    std::cout << "With ENABLE_OPENGL_DEBUG_OPTION...\n";
+#else
+    std::cout << "Without ENABLE_OPENGL_DEBUG_OPTION...\n";
+#endif
+
+#ifdef NDEBUG
+    std::cout << "With NDEBUG...\n";
+#else
+    std::cout << "Without NDEBUG...\n";
+#endif
+
     return CLI().run(argc, argv);
 }
 #endif /* _MSC_VER */
