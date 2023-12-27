@@ -216,7 +216,7 @@ void GCodeViewer::COG::render()
 
     shader->stop_using();
 
-    ////Show ImGui window 
+    ////Show ImGui window
     //static float last_window_width = 0.0f;
     //static size_t last_text_length = 0;
 
@@ -305,7 +305,7 @@ void GCodeViewer::SequentialView::Marker::init()
 }
 
 void GCodeViewer::SequentialView::Marker::set_world_position(const Vec3f& position)
-{    
+{
     m_world_position = position;
     m_world_transform = (Geometry::translation_transform((position + m_model_z_offset * Vec3f::UnitZ()).cast<double>()) *
         Geometry::translation_transform(m_model.get_bounding_box().size().z() * Vec3d::UnitZ()) * Geometry::rotation_transform({ M_PI, 0.0, 0.0 })).cast<float>();
@@ -739,7 +739,7 @@ const std::vector<ColorRGBA> GCodeViewer::Range_Colors{ {
     { 0.5f * (0.820f + 0.761f), 0.5f * (0.408f + 0.322f), 0.5f * (0.188f + 0.235f), 1.0f },
     { 0.761f, 0.322f, 0.235f, 1.0f },
     { 0.5f * (0.761f + 0.581f), 0.5f * (0.322f + 0.149f), 0.5f * (0.235f + 0.087f), 1.0f },
-    { 0.581f, 0.149f, 0.087f, 1.0f }  // reddishgit 
+    { 0.581f, 0.149f, 0.087f, 1.0f }  // reddishgit
 } };
 #endif
 
@@ -834,7 +834,7 @@ void GCodeViewer::load(const GCodeProcessorResult& gcode_result, const Print& pr
     m_last_view_type = m_view_type;
 
     // release gpu memory, if used
-    reset(); 
+    reset();
 
     m_sequential_view.gcode_window.load_gcode(gcode_result);
 
@@ -1609,7 +1609,7 @@ void GCodeViewer::load_toolpaths(const GCodeProcessorResult& gcode_result)
         const double width = static_cast<double>(1.5f * curr.width);
         const double height = static_cast<double>(1.5f * curr.height);
 
-        const Transform3d trafo = Geometry::translation_transform((curr.position - 0.5f * curr.height * Vec3f::UnitZ()).cast<double>()) * 
+        const Transform3d trafo = Geometry::translation_transform((curr.position - 0.5f * curr.height * Vec3f::UnitZ()).cast<double>()) *
           Geometry::scale_transform({ width, width, height });
         const Eigen::Matrix<double, 3, 3, Eigen::DontAlign> normal_matrix = trafo.matrix().template block<3, 3>(0, 0).inverse().transpose();
 
@@ -1807,7 +1807,7 @@ void GCodeViewer::load_toolpaths(const GCodeProcessorResult& gcode_result)
                     VertexBuffer& vbuffer = v_multibuffer[prev_sub_path.first.b_id];
                     // offset into the vertex buffer of the next segment 1st vertex
                     const size_t next_1st_offset = (prev_sub_path.last.s_id - curr_s_id) * 6 * vertex_size_floats;
-                    // offset into the vertex buffer of the right vertex of the previous segment 
+                    // offset into the vertex buffer of the right vertex of the previous segment
                     const size_t prev_right_offset = prev_sub_path.last.i_id - next_1st_offset - 3 * vertex_size_floats;
                     // new position of the right vertices
                     const Vec3f shared_vertex = extract_position_at(vbuffer, prev_right_offset) + displacement_vec;
@@ -1821,7 +1821,7 @@ void GCodeViewer::load_toolpaths(const GCodeProcessorResult& gcode_result)
                 else { // previous and next segment are contained into different vertex buffers
                     VertexBuffer& prev_vbuffer = v_multibuffer[prev_sub_path.first.b_id];
                     VertexBuffer& next_vbuffer = v_multibuffer[next_sub_path.first.b_id];
-                    // offset into the previous vertex buffer of the right vertex of the previous segment 
+                    // offset into the previous vertex buffer of the right vertex of the previous segment
                     const size_t prev_right_offset = prev_sub_path.last.i_id - 3 * vertex_size_floats;
                     // new position of the right vertices
                     const Vec3f shared_vertex = extract_position_at(prev_vbuffer, prev_right_offset) + displacement_vec;
@@ -1839,7 +1839,7 @@ void GCodeViewer::load_toolpaths(const GCodeProcessorResult& gcode_result)
                     VertexBuffer& vbuffer = v_multibuffer[prev_sub_path.first.b_id];
                     // offset into the vertex buffer of the next segment 1st vertex
                     const size_t next_1st_offset = (prev_sub_path.last.s_id - curr_s_id) * 6 * vertex_size_floats;
-                    // offset into the vertex buffer of the left vertex of the previous segment 
+                    // offset into the vertex buffer of the left vertex of the previous segment
                     const size_t prev_left_offset = prev_sub_path.last.i_id - next_1st_offset - 1 * vertex_size_floats;
                     // new position of the left vertices
                     const Vec3f shared_vertex = extract_position_at(vbuffer, prev_left_offset) + displacement_vec;
@@ -1853,7 +1853,7 @@ void GCodeViewer::load_toolpaths(const GCodeProcessorResult& gcode_result)
                 else { // previous and next segment are contained into different vertex buffers
                     VertexBuffer& prev_vbuffer = v_multibuffer[prev_sub_path.first.b_id];
                     VertexBuffer& next_vbuffer = v_multibuffer[next_sub_path.first.b_id];
-                    // offset into the previous vertex buffer of the left vertex of the previous segment 
+                    // offset into the previous vertex buffer of the left vertex of the previous segment
                     const size_t prev_left_offset = prev_sub_path.last.i_id - 1 * vertex_size_floats;
                     // new position of the left vertices
                     const Vec3f shared_vertex = extract_position_at(prev_vbuffer, prev_left_offset) + displacement_vec;
@@ -2339,7 +2339,7 @@ void GCodeViewer::load_shells(const Print& print)
         // no shells, return
         return;
 
-    // adds objects' volumes 
+    // adds objects' volumes
     for (const PrintObject* obj : print.objects()) {
         const ModelObject* model_obj = obj->model_object();
         int object_id = -1;
@@ -2673,7 +2673,7 @@ void GCodeViewer::refresh_render_paths(bool keep_sequential_current_first, bool 
                                 unsigned int indices_count = buffer.indices_per_segment();
                                 offset = indices_count * (offset - 1) + (indices_count - 2);
                                 if (sub_path_id == 0)
-                                    offset += 6; // add 2 triangles for starting cap 
+                                    offset += 6; // add 2 triangles for starting cap
                             }
                         }
                         offset += static_cast<unsigned int>(sub_path.first.i_id);
@@ -2786,11 +2786,11 @@ void GCodeViewer::refresh_render_paths(bool keep_sequential_current_first, bool 
 
         if (buffer.render_primitive_type == TBuffer::ERenderPrimitiveType::Triangle) {
             if (sub_path_id == 0 && delta_1st == 0)
-                size_in_indices += 6; // add 2 triangles for starting cap 
+                size_in_indices += 6; // add 2 triangles for starting cap
             if (sub_path_id == path.sub_paths.size() - 1 && path.sub_paths.back().last.s_id <= m_sequential_view.current.last)
-                size_in_indices += 6; // add 2 triangles for ending cap 
+                size_in_indices += 6; // add 2 triangles for ending cap
             if (delta_1st > 0)
-                size_in_indices -= 6; // remove 2 triangles for corner cap  
+                size_in_indices -= 6; // remove 2 triangles for corner cap
         }
 
         render_path->sizes.push_back(size_in_indices);
@@ -2798,9 +2798,9 @@ void GCodeViewer::refresh_render_paths(bool keep_sequential_current_first, bool 
         if (buffer.render_primitive_type == TBuffer::ERenderPrimitiveType::Triangle) {
             delta_1st *= buffer.indices_per_segment();
             if (delta_1st > 0) {
-                delta_1st += 6; // skip 2 triangles for corner cap 
+                delta_1st += 6; // skip 2 triangles for corner cap
                 if (sub_path_id == 0)
-                    delta_1st += 6; // skip 2 triangles for starting cap 
+                    delta_1st += 6; // skip 2 triangles for starting cap
             }
         }
 
@@ -2814,13 +2814,13 @@ void GCodeViewer::refresh_render_paths(bool keep_sequential_current_first, bool 
         glsafe(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
         if (render_path->offsets.back() + render_path->sizes.back() * sizeof(IBufferType) > buffer_size)
             BOOST_LOG_TRIVIAL(error) << "GCodeViewer::refresh_render_paths: Invalid render path data";
-#endif 
+#endif
     }
 
     // Removes empty render paths and sort.
     for (size_t b = 0; b < m_buffers.size(); ++b) {
         TBuffer* buffer = const_cast<TBuffer*>(&m_buffers[b]);
-        buffer->render_paths.erase(std::remove_if(buffer->render_paths.begin(), buffer->render_paths.end(), 
+        buffer->render_paths.erase(std::remove_if(buffer->render_paths.begin(), buffer->render_paths.end(),
             [](const auto &path){ return path.sizes.empty() || path.offsets.empty(); }),
             buffer->render_paths.end());
     }
@@ -3777,7 +3777,7 @@ void GCodeViewer::render_legend(float& legend_height)
     if (imgui.combo(std::string(), view_options, view_type_id, ImGuiComboFlags_HeightLargest, 0.0f, -1.0f))
         view_type = view_options_id[view_type_id];
     ImGui::PopStyleColor(2);
-   
+
     if (old_view_type != view_type) {
         set_view_type(static_cast<EViewType>(view_type));
         wxGetApp().plater()->set_keep_current_preview_type(true);
