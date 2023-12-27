@@ -114,7 +114,7 @@ void OpenGLManager::GLInfo::detect() const
     *const_cast<Semver*>(&m_version)       = parse_version_string(m_version_string);
     *const_cast<bool*>(&m_version_is_mesa) = boost::icontains(m_version_string, "mesa");
     *const_cast<Semver*>(&m_glsl_version)  = parse_version_string(m_glsl_version_string);
-    
+
     int* max_tex_size = const_cast<int*>(&m_max_tex_size);
     glsafe(::glGetIntegerv(GL_MAX_TEXTURE_SIZE, max_tex_size));
 
@@ -168,7 +168,7 @@ bool OpenGLManager::GLInfo::is_version_greater_or_equal_to(unsigned int major, u
 {
     if (!m_detected)
         detect();
-    
+
     return m_version >= Semver(major, minor, 0);
 }
 
@@ -265,16 +265,16 @@ bool OpenGLManager::s_force_power_of_two_textures = false;
 OpenGLManager::EMultisampleState OpenGLManager::s_multisample = OpenGLManager::EMultisampleState::Unknown;
 OpenGLManager::EFramebufferType OpenGLManager::s_framebuffers_type = OpenGLManager::EFramebufferType::Unknown;
 
-#ifdef __APPLE__ 
+#ifdef __APPLE__
 // Part of hack to remove crash when closing the application on OSX 10.9.5 when building against newer wxWidgets
 OpenGLManager::OSInfo OpenGLManager::s_os_info;
-#endif // __APPLE__ 
+#endif // __APPLE__
 
 OpenGLManager::~OpenGLManager()
 {
     m_shaders_manager.shutdown();
 
-#ifdef __APPLE__ 
+#ifdef __APPLE__
     // This is an ugly hack needed to solve the crash happening when closing the application on OSX 10.9.5 with newer wxWidgets
     // The crash is triggered inside wxGLContext destructor
     if (s_os_info.major != 10 || s_os_info.minor != 9 || s_os_info.micro != 5)
@@ -282,7 +282,7 @@ OpenGLManager::~OpenGLManager()
 #endif //__APPLE__
         if (m_context != nullptr)
             delete m_context;
-#ifdef __APPLE__ 
+#ifdef __APPLE__
     }
 #endif //__APPLE__
 }
@@ -487,7 +487,7 @@ wxGLContext* OpenGLManager::init_glcontext(wxGLCanvas& canvas)
         }
 
         if (m_context == nullptr) {
-            // search for requested core profile version 
+            // search for requested core profile version
             if (supports_core_profile) {
                 // disable wxWidgets logging to avoid showing the log dialog in case the following code fails generating a valid gl context
                 wxLogNull logNo;
@@ -530,7 +530,7 @@ wxGLContext* OpenGLManager::init_glcontext(wxGLCanvas& canvas)
         m_context = new wxGLContext(&canvas);
 #endif // ENABLE_OPENGL_ES
 
-#ifdef __APPLE__ 
+#ifdef __APPLE__
         // Part of hack to remove crash when closing the application on OSX 10.9.5 when building against newer wxWidgets
         s_os_info.major = wxPlatformInfo::Get().GetOSMajorVersion();
         s_os_info.minor = wxPlatformInfo::Get().GetOSMinorVersion();
@@ -600,7 +600,7 @@ void OpenGLManager::detect_multisample(int* attribList)
 {
     int wxVersion = wxMAJOR_VERSION * 10000 + wxMINOR_VERSION * 100 + wxRELEASE_NUMBER;
     bool enable_multisample = wxVersion >= 30003;
-    s_multisample = 
+    s_multisample =
         enable_multisample &&
         // Disable multi-sampling on ChromeOS, as the OpenGL virtualization swaps Red/Blue channels with multi-sampling enabled,
         // at least on some platforms.
