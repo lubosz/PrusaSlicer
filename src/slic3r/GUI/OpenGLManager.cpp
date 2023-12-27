@@ -544,7 +544,11 @@ wxGLCanvas* OpenGLManager::create_wxglcanvas(wxWindow& parent)
 {
 #if ENABLE_GL_CORE_PROFILE || ENABLE_OPENGL_ES
     wxGLAttributes attribList;
-    attribList.PlatformDefaults().RGBA().DoubleBuffer().MinRGBA(8, 8, 8, 8).Depth(24).SampleBuffers(1).Samplers(4).EndList();
+    std::cout << "Init attrib list!\n";
+    //attribList.PlatformDefaults().RGBA().DoubleBuffer().MinRGBA(8, 8, 8, 8).Depth(24).SampleBuffers(1).Samplers(4).EndList();
+    //attribList.PlatformDefaults();
+    attribList.PlatformDefaults().RGBA().DoubleBuffer().MinRGBA(8, 8, 8, 8).Depth(24).SampleBuffers(8).Samplers(32).EndList();
+    std::cout << "Init attrib list done!\n";
 #ifdef __APPLE__
     // on MAC the method RGBA() has no effect
     attribList.SetNeedsARB(true);
@@ -569,8 +573,9 @@ wxGLCanvas* OpenGLManager::create_wxglcanvas(wxWindow& parent)
 
     if (s_multisample == EMultisampleState::Unknown) {
         detect_multisample(attribList);
+    s_multisample =  EMultisampleState::Disabled;
 //        // debug output
-//        std::cout << "Multisample " << (can_multisample() ? "enabled" : "disabled") << std::endl;
+       std::cout << "Multisample " << (can_multisample() ? "enabled" : "disabled") << std::endl;
     }
 
     if (!can_multisample())
