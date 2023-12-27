@@ -65,7 +65,7 @@ void main()
         color.rgb = vec3(0.7, 0.7, 1.0);
         color.a = 1.0;
     }
-	
+
     // if the fragment is outside the print volume -> use darker color
 	vec3 pv_check_min = ZERO;
 	vec3 pv_check_max = ZERO;
@@ -81,7 +81,7 @@ void main()
 		pv_check_max = vec3(0.0, 0.0, world_pos.z - print_volume.z_data.y);
 	}
 	color.rgb = (any(lessThan(pv_check_min, ZERO)) || any(greaterThan(pv_check_max, ZERO))) ? mix(color.rgb, ZERO, 0.3333) : color.rgb;
-	
+
 #ifdef ENABLE_ENVIRONMENT_MAP
     if (use_environment_tex)
         out_color = vec4(0.45 * texture(environment_tex, normalize(eye_normal).xy * 0.5 + 0.5).xyz + 0.8 * color.rgb * intensity.x, color.a);
