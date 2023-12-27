@@ -11,4 +11,5 @@ out vec4 out_color;
 void main()
 {
     out_color = vec4(vec3(intensity.y) + uniform_color.rgb * (intensity.x + emission_factor), uniform_color.a);
+    out_color = vec4(0, 0, 1, 1);
 }

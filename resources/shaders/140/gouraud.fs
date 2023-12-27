@@ -88,4 +88,6 @@ void main()
     else
 #endif
         out_color = vec4(vec3(intensity.y) + color.rgb * intensity.x, color.a);
+
+    out_color = vec4(1, 0, 0, 1);
 }
