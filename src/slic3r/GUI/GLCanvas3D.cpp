@@ -1806,6 +1806,7 @@ void GLCanvas3D::enable_dynamic_background(bool enable)
 void GLCanvas3D::allow_multisample(bool allow)
 {
     m_multisample_allowed = allow;
+    printf("allow_multisample: %d\n", m_multisample_allowed);
 }
 
 void GLCanvas3D::zoom_to_bed()
