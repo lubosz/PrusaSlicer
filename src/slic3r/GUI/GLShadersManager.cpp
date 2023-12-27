@@ -69,6 +69,10 @@ std::pair<bool, std::string> GLShadersManager::init()
     valid &= append_shader("toolpaths_cog", { prefix + "toolpaths_cog.vs", prefix + "toolpaths_cog.fs" });
     // used to render bed axes and model, selection hints, gcode sequential view marker model, preview shells, options in gcode preview
     valid &= append_shader("gouraud_light", { prefix + "gouraud_light.vs", prefix + "gouraud_light.fs" });
+
+    // used to render bed axes and model, selection hints, gcode sequential view marker model, preview shells, options in gcode preview
+    valid &= append_shader("phong_light", { prefix + "phong_light.vs", prefix + "phong_light.fs" });
+
     // extend "gouraud_light" by adding clipping, used in sla gizmos
     valid &= append_shader("gouraud_light_clip", { prefix + "gouraud_light_clip.vs", prefix + "gouraud_light_clip.fs" });
     // used to render printbed

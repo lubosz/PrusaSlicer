@@ -797,7 +797,7 @@ void GCodeViewer::init()
         case EMoveType::Extrude: {
             buffer.render_primitive_type = TBuffer::ERenderPrimitiveType::Triangle;
             buffer.vertices.format = VBuffer::EFormat::PositionNormal3;
-            buffer.shader = "gouraud";
+            buffer.shader = "phong_light";
             break;
         }
         case EMoveType::Travel: {
