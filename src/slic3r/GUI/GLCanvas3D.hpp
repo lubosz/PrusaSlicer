@@ -1140,6 +1140,7 @@ ModelInstance *get_model_instance(const GLVolume &gl_volume, const Model &model)
 ModelInstance *get_model_instance(const GLVolume &gl_volume, const ModelObjectPtrs &objects);
 ModelInstance *get_model_instance(const GLVolume &gl_volume, const ModelObject &object);
 
+void debug_message(const char *message);
 } // namespace GUI
 } // namespace Slic3r
 
