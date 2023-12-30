@@ -188,15 +188,6 @@ void GCodeViewer::TBuffer::add_path(const GCodeProcessorResult::MoveVertex& move
 
 void GCodeViewer::COG::render()
 {
-    const char *message = "GCodeViewer::COG::render";
-
-    glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
-      GL_DEBUG_TYPE_MARKER,
-      0,
-      GL_DEBUG_SEVERITY_NOTIFICATION,
-      strlen(message),
-      message);
-
     if (!m_visible)
         return;
 
@@ -413,6 +404,16 @@ void GCodeViewer::SequentialView::GCodeWindow::add_gcode_line_to_lines_cache(con
 
 void GCodeViewer::SequentialView::GCodeWindow::render(float top, float bottom, size_t curr_line_id)
 {
+    const char *message = "GCodeViewer::SequentialView::GCodeWindow::render";
+
+    glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
+      GL_DEBUG_TYPE_MARKER,
+      0,
+      GL_DEBUG_SEVERITY_NOTIFICATION,
+      strlen(message),
+      message);
+
+
     auto update_lines_ascii = [this]() {
         m_lines_cache.clear();
         m_lines_cache.reserve(m_cache_range.size());
