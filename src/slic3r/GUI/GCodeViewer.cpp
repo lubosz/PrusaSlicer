@@ -188,6 +188,15 @@ void GCodeViewer::TBuffer::add_path(const GCodeProcessorResult::MoveVertex& move
 
 void GCodeViewer::COG::render()
 {
+    const char *message = "GCodeViewer::COG::render";
+
+    glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
+      GL_DEBUG_TYPE_MARKER,
+      0,
+      GL_DEBUG_SEVERITY_NOTIFICATION,
+      strlen(message),
+      message);
+
     if (!m_visible)
         return;
 
