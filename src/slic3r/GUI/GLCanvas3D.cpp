@@ -1859,8 +1859,6 @@ void GLCanvas3D::update_volumes_colors_by_extruder()
 
 void GLCanvas3D::render()
 {
-    debug_message("GLCanvas3D::render");
-
     if (m_in_render) {
         // if called recursively, return
         m_dirty = true;
@@ -1889,6 +1887,8 @@ void GLCanvas3D::render()
         post_event(SimpleEvent(EVT_GLCANVAS_UPDATE_BED_SHAPE));
         return;
     }
+
+    debug_message("GLCanvas3D::render");
 
 #if ENABLE_ENVIRONMENT_MAP
     if (wxGetApp().is_editor())
