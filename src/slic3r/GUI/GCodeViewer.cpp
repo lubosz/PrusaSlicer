@@ -47,6 +47,15 @@
 namespace Slic3r {
 namespace GUI {
 
+static void debug_message(const char *message) {
+    glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
+      GL_DEBUG_TYPE_MARKER,
+      0,
+      GL_DEBUG_SEVERITY_NOTIFICATION,
+      strlen(message),
+      message);
+}
+
 static unsigned char buffer_id(EMoveType type) {
     return static_cast<unsigned char>(type) - static_cast<unsigned char>(EMoveType::Retract);
 }
@@ -404,15 +413,7 @@ void GCodeViewer::SequentialView::GCodeWindow::add_gcode_line_to_lines_cache(con
 
 void GCodeViewer::SequentialView::GCodeWindow::render(float top, float bottom, size_t curr_line_id)
 {
-    const char *message = "GCodeViewer::SequentialView::GCodeWindow::render";
-
-    glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
-      GL_DEBUG_TYPE_MARKER,
-      0,
-      GL_DEBUG_SEVERITY_NOTIFICATION,
-      strlen(message),
-      message);
-
+    debug_message("GCodeViewer::SequentialView::GCodeWindow::render");
 
     auto update_lines_ascii = [this]() {
         m_lines_cache.clear();
@@ -1037,6 +1038,8 @@ void GCodeViewer::reset()
 
 void GCodeViewer::render()
 {
+  debug_message("GCodeViewer::render");
+
 #if ENABLE_GCODE_VIEWER_STATISTICS
     m_statistics.reset_opengl();
     m_statistics.total_instances_gpu_size = 0;
@@ -2465,6 +2468,8 @@ void GCodeViewer::load_wipetower_shell(const Print& print)
 
 void GCodeViewer::refresh_render_paths(bool keep_sequential_current_first, bool keep_sequential_current_last) const
 {
+  debug_message("GCodeViewer::refresh_render_paths");
+
 #if ENABLE_GCODE_VIEWER_STATISTICS
     auto start_time = std::chrono::high_resolution_clock::now();
 #endif // ENABLE_GCODE_VIEWER_STATISTICS
@@ -3046,6 +3051,7 @@ void GCodeViewer::refresh_render_paths(bool keep_sequential_current_first, bool 
 
 void GCodeViewer::render_toolpaths()
 {
+    debug_message("GCodeViewer::render_toolpaths");
     const Camera& camera = wxGetApp().plater()->get_camera();
 #if !ENABLE_GL_CORE_PROFILE
     const double zoom = camera.get_zoom();
@@ -3345,6 +3351,8 @@ void GCodeViewer::render_toolpaths()
         }
 
         shader->set_uniform("uniform_color", cap.color);
+
+        debug_message("Line 3350");
 
         glsafe(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cap.ibo));
         glsafe(::glDrawElements(GL_TRIANGLES, (GLsizei)cap.indices_count(), GL_UNSIGNED_SHORT, nullptr));
