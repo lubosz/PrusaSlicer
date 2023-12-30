@@ -100,6 +100,15 @@ static bool show_imgui_demo_window = false;
 namespace Slic3r {
 namespace GUI {
 
+void debug_message(const char *message) {
+    glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
+      GL_DEBUG_TYPE_MARKER,
+      0,
+      GL_DEBUG_SEVERITY_NOTIFICATION,
+      strlen(message),
+      message);
+}
+
 #ifdef __WXGTK3__
 // wxGTK3 seems to simulate OSX behavior in regard to HiDPI scaling support.
 RetinaHelper::RetinaHelper(wxWindow* window) : m_window(window), m_self(nullptr) {}
@@ -1850,6 +1859,8 @@ void GLCanvas3D::update_volumes_colors_by_extruder()
 
 void GLCanvas3D::render()
 {
+    debug_message("GLCanvas3D::render");
+
     if (m_in_render) {
         // if called recursively, return
         m_dirty = true;

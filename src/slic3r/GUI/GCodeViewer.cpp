@@ -47,15 +47,6 @@
 namespace Slic3r {
 namespace GUI {
 
-static void debug_message(const char *message) {
-    glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
-      GL_DEBUG_TYPE_MARKER,
-      0,
-      GL_DEBUG_SEVERITY_NOTIFICATION,
-      strlen(message),
-      message);
-}
-
 static unsigned char buffer_id(EMoveType type) {
     return static_cast<unsigned char>(type) - static_cast<unsigned char>(EMoveType::Retract);
 }
@@ -3082,6 +3073,7 @@ void GCodeViewer::render_toolpaths()
                 glsafe(::glDrawElements(GL_LINES, (GLsizei)path.sizes[i], GL_UNSIGNED_SHORT, (const void*)path.offsets[i]));
             }
 #else
+            debug_message("MultiDrawElements1");
             glsafe(::glMultiDrawElements(GL_LINES, (const GLsizei*)path.sizes.data(), GL_UNSIGNED_SHORT, (const void* const*)path.offsets.data(), (GLsizei)path.sizes.size()));
 #endif // ENABLE_OPENGL_ES
 #if ENABLE_GCODE_VIEWER_STATISTICS
@@ -3106,6 +3098,7 @@ void GCodeViewer::render_toolpaths()
                 glsafe(::glDrawElements(GL_TRIANGLES, (GLsizei)path.sizes[i], GL_UNSIGNED_SHORT, (const void*)path.offsets[i]));
             }
 #else
+            debug_message("MultiDrawElements2");
             glsafe(::glMultiDrawElements(GL_TRIANGLES, (const GLsizei*)path.sizes.data(), GL_UNSIGNED_SHORT, (const void* const*)path.offsets.data(), (GLsizei)path.sizes.size()));
 #endif // ENABLE_OPENGL_ES
 #if ENABLE_GCODE_VIEWER_STATISTICS
