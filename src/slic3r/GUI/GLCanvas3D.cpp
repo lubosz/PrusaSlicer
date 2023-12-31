@@ -1888,6 +1888,8 @@ void GLCanvas3D::render()
         return;
     }
 
+    m_taa_manager.init();
+
     debug_message("GLCanvas3D::render");
 
 #if ENABLE_ENVIRONMENT_MAP
