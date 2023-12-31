@@ -57,13 +57,12 @@ void TAAManager::initGL(uint32_t width, uint32_t height) {
 }
 
 void TAAManager::shutdownGL() {
-    // glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
-    // glsafe(::glDeleteRenderbuffers(1, &render_depth));
-    // if (render_tex_buffer != 0)
-    //     glsafe(::glDeleteRenderbuffers(1, &render_tex_buffer));
-    // if (render_tex != 0)
-    //     glsafe(::glDeleteTextures(1, &render_tex));
-    // glsafe(::glDeleteFramebuffers(1, &render_fbo));
+    for (const Pass& pass : m_passes) {
+        glsafe(::glDeleteRenderbuffers(1, &pass.depth_render_buffer));
+        glsafe(::glDeleteRenderbuffers(1, &pass.color_render_buffer));
+        glsafe(::glDeleteFramebuffers(1, &pass.frame_buffer));
+    }
+    m_passes.clear();
 }
 
 void TAAManager::begin_frame() {
