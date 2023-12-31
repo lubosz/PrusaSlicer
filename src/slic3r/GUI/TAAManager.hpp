@@ -39,7 +39,7 @@ class TAAManager
 
     bool m_gl_data_initialized = false;
     uint32_t m_num_buffers = 8;
-    std::vector passes<Pass> m_passes;
+    std::vector<Pass> m_passes;
 };
 
 } // namespace GUI
