@@ -7,10 +7,8 @@
 #include "TAAManager.hpp"
 
 #include <cstdio>
-#include <GL/glew.h>
 
-#include "GLCanvas3D.hpp"
-#include "OpenGLManager.hpp"
+#include "3DScene.hpp"
 
 namespace Slic3r {
 namespace GUI {
@@ -54,12 +52,33 @@ void TAAManager::initGL(uint32_t width, uint32_t height) {
     glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, render_tex_buffer));
 
 
+    GLuint render_depth;
+    glsafe(::glGenRenderbuffers(1, &render_depth));
+    glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, render_depth));
+    glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
+    glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, render_depth));
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+      printf("ERROR: Framebuffer incomplete.\n");
+    }
+
     glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
     glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
 }
 
+void TAAManager::shutdownGL() {
+    // glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    // glsafe(::glDeleteRenderbuffers(1, &render_depth));
+    // if (render_tex_buffer != 0)
+    //     glsafe(::glDeleteRenderbuffers(1, &render_tex_buffer));
+    // if (render_tex != 0)
+    //     glsafe(::glDeleteTextures(1, &render_tex));
+    // glsafe(::glDeleteFramebuffers(1, &render_fbo));
+}
 
 void TAAManager::begin_frame() {
+    GLenum drawBufs[] = { GL_COLOR_ATTACHMENT0 };
+    glsafe(::glDrawBuffers(1, drawBufs));
 
 }
 
