@@ -6,6 +6,8 @@
 
 #include "TAAManager.hpp"
 
+#include <stdio.h>
+
 namespace Slic3r {
 namespace GUI {
 
