@@ -24,7 +24,7 @@ void TAAManager::init()
 
     printf("Initializing TAAManager!");
 
-    initGL();
+    initGL(1920, 1080);
 
     m_gl_data_initialized = true;
 }
