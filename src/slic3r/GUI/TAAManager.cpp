@@ -28,42 +28,32 @@ void TAAManager::init()
 }
 
 void TAAManager::initGL(uint32_t width, uint32_t height) {
+    for (uint32_t i = 0; i < m_num_buffers; i++) {
+        Pass pass = {};
 
-    GLuint render_fbo;
-    glsafe(::glGenFramebuffers(1, &render_fbo));
-    glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, render_fbo));
+        glsafe(::glGenFramebuffers(1, &pass.frame_buffer));
+        glsafe(::glGenRenderbuffers(1, &pass.color_render_buffer));
+        glsafe(::glGenRenderbuffers(1, &pass.depth_render_buffer));
 
-    // GLuint render_tex = 0;
-    // glsafe(::glGenTextures(1, &render_tex));
-    // glsafe(::glBindTexture(GL_TEXTURE_2D, render_tex));
-    // glsafe(::glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
-    //                       static_cast<GLsizei>(width),
-    //                       static_cast<GLsizei>(height),
-    //                       0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
-    // glsafe(::glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-    // glsafe(::glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-    // glsafe(::glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_tex, 0));
+        glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, pass.frame_buffer));
+        glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, pass.color_render_buffer));
+        glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
+        glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, pass.color_render_buffer));
 
-    GLuint render_tex_buffer = 0;
-    glsafe(::glGenRenderbuffers(1, &render_tex_buffer));
-    glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, render_tex_buffer));
-    // glsafe(::glRenderbufferStorageMultisample(GL_RENDERBUFFER, num_samples, GL_RGBA8, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
-    glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
-    glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, render_tex_buffer));
+        glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, pass.depth_render_buffer));
+        glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
+        glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pass.depth_render_buffer));
 
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            printf("ERROR: Framebuffer incomplete.\n");
+        }
 
-    GLuint render_depth;
-    glsafe(::glGenRenderbuffers(1, &render_depth));
-    glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, render_depth));
-    glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
-    glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, render_depth));
+        glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
+        glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
 
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-      printf("ERROR: Framebuffer incomplete.\n");
+        m_passes.push_back(pass);
     }
 
-    glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
-    glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
 }
 
 void TAAManager::shutdownGL() {
