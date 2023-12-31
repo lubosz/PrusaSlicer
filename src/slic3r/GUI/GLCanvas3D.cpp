@@ -1943,16 +1943,25 @@ void GLCanvas3D::render()
 
     // draw scene
     glsafe(::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    debug_message("_render_background");
     _render_background();
 
+    debug_message("_render_objects");
     _render_objects(GLVolumeCollection::ERenderType::Opaque);
+    debug_message("_render_sla_slices");
     _render_sla_slices();
+    debug_message("_render_selection");
     _render_selection();
+    debug_message("_render_bed_axes");
     _render_bed_axes();
-    if (is_looking_downward)
-        _render_bed(camera.get_view_matrix(), camera.get_projection_matrix(), false);
-    if (!m_main_toolbar.is_enabled() && current_printer_technology() != ptSLA)
+    if (is_looking_downward) {
+      _render_bed(camera.get_view_matrix(), camera.get_projection_matrix(), false);
+      debug_message("_render_bed");
+    }
+    if (!m_main_toolbar.is_enabled() && current_printer_technology() != ptSLA) {
+        debug_message("_render_gcode");
         _render_gcode();
+    }
     _render_objects(GLVolumeCollection::ERenderType::Transparent);
 
     _render_sequential_clearance();

@@ -3073,7 +3073,6 @@ void GCodeViewer::render_toolpaths()
                 glsafe(::glDrawElements(GL_LINES, (GLsizei)path.sizes[i], GL_UNSIGNED_SHORT, (const void*)path.offsets[i]));
             }
 #else
-            debug_message("MultiDrawElements1");
             glsafe(::glMultiDrawElements(GL_LINES, (const GLsizei*)path.sizes.data(), GL_UNSIGNED_SHORT, (const void* const*)path.offsets.data(), (GLsizei)path.sizes.size()));
 #endif // ENABLE_OPENGL_ES
 #if ENABLE_GCODE_VIEWER_STATISTICS
@@ -3098,7 +3097,6 @@ void GCodeViewer::render_toolpaths()
                 glsafe(::glDrawElements(GL_TRIANGLES, (GLsizei)path.sizes[i], GL_UNSIGNED_SHORT, (const void*)path.offsets[i]));
             }
 #else
-            debug_message("MultiDrawElements2");
             glsafe(::glMultiDrawElements(GL_TRIANGLES, (const GLsizei*)path.sizes.data(), GL_UNSIGNED_SHORT, (const void* const*)path.offsets.data(), (GLsizei)path.sizes.size()));
 #endif // ENABLE_OPENGL_ES
 #if ENABLE_GCODE_VIEWER_STATISTICS
@@ -3344,8 +3342,6 @@ void GCodeViewer::render_toolpaths()
         }
 
         shader->set_uniform("uniform_color", cap.color);
-
-        debug_message("Line 3350");
 
         glsafe(::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cap.ibo));
         glsafe(::glDrawElements(GL_TRIANGLES, (GLsizei)cap.indices_count(), GL_UNSIGNED_SHORT, nullptr));
