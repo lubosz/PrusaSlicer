@@ -22,7 +22,7 @@ void TAAManager::init()
     if (m_gl_data_initialized)
         return;
 
-    printf("Initializing TAAManager!");
+    printf("Initializing TAAManager!\n");
 
     initGL(1920, 1080);
 
@@ -53,6 +53,9 @@ void TAAManager::initGL(uint32_t width, uint32_t height) {
     glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
     glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, render_tex_buffer));
 
+
+    glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
 }
 
 
