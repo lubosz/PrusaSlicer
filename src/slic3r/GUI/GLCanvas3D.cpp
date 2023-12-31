@@ -1948,6 +1948,8 @@ void GLCanvas3D::render()
     debug_message("_render_background");
     _render_background();
 
+    m_taa_manager.begin_frame();
+
     debug_message("_render_objects");
     _render_objects(GLVolumeCollection::ERenderType::Opaque);
     debug_message("_render_sla_slices");
@@ -1994,6 +1996,8 @@ void GLCanvas3D::render()
 #if ENABLE_SHOW_CAMERA_TARGET
     _render_camera_target();
 #endif // ENABLE_SHOW_CAMERA_TARGET
+
+    m_taa_manager.end_frame();
 
     if (m_picking_enabled && m_rectangle_selection.is_dragging())
         m_rectangle_selection.render(*this);
