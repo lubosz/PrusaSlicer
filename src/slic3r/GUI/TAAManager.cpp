@@ -57,6 +57,7 @@ void TAAManager::initGL(uint32_t width, uint32_t height) {
 }
 
 void TAAManager::shutdownGL() {
+    printf("Shutting down TAAManager!\n");
     for (const Pass& pass : m_passes) {
         glsafe(::glDeleteRenderbuffers(1, &pass.depth_render_buffer));
         glsafe(::glDeleteRenderbuffers(1, &pass.color_render_buffer));
@@ -66,13 +67,13 @@ void TAAManager::shutdownGL() {
 }
 
 void TAAManager::begin_frame() {
-    GLenum drawBufs[] = { GL_COLOR_ATTACHMENT0 };
-    glsafe(::glDrawBuffers(1, drawBufs));
+    glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, m_passes[0].frame_buffer));
 
 }
 
 void TAAManager::end_frame() {
-
+    glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
 }
 
 void TAAManager::display_frame() {
