@@ -23,6 +23,7 @@
 #include "Camera.hpp"
 #include "SceneRaycaster.hpp"
 #include "GUI_Utils.hpp"
+#include "TAAManager.hpp"
 
 #include "libslic3r/Arrange/ArrangeSettingsDb_AppCfg.hpp"
 #include "ArrangeSettingsDialogImgui.hpp"
@@ -515,6 +516,8 @@ private:
     TriangleMesh m_wipe_tower_mesh;
 #endif // ENABLE_OPENGL_ES
     GCodeViewer m_gcode_viewer;
+
+    TAAManager m_taa_manager;
 
     RenderTimer m_render_timer;
 
