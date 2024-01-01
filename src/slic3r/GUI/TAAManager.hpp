@@ -15,6 +15,8 @@
 namespace Slic3r {
 namespace GUI {
 
+class Size;
+
 struct Pass
 {
   GLuint frame_buffer;
@@ -29,15 +31,15 @@ class TAAManager
     TAAManager();
     ~TAAManager() { shutdownGL(); }
 
-    void init();
+    void init(const Size& canvas_size);
     void begin_frame();
     void end_frame();
     void display_frame();
 
   private:
     void shutdownGL();
-    void initGL(uint32_t width, uint32_t height);
-    void initFrameBuffers(uint32_t width, uint32_t height);
+    void initGL(const Size& canvas_size);
+    void initFrameBuffers(const Size& canvas_size);
     void initVertices();
 
     bool m_gl_data_initialized = false;

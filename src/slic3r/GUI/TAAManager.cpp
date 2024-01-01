@@ -9,22 +9,21 @@
 #include <cstdio>
 
 #include "3DScene.hpp"
-#include "slic3r/GUI/GLShader.hpp"
-#include "slic3r/GUI/GUI_App.hpp"
+#include "GLCanvas3D.hpp"
+#include "GLShader.hpp"
+#include "GUI_App.hpp"
 
 namespace Slic3r {
 namespace GUI {
 
 TAAManager::TAAManager() {}
 
-void TAAManager::init()
+void TAAManager::init(const Size& canvas_size)
 {
     if (m_gl_data_initialized)
         return;
 
-    printf("Initializing TAAManager!\n");
-
-    initGL(1920, 1080);
+    initGL(canvas_size);
 
     m_gl_data_initialized = true;
 }
@@ -70,7 +69,7 @@ void TAAManager::initVertices() {
 
 }
 
-void TAAManager::initFrameBuffers(uint32_t width, uint32_t height) {
+void TAAManager::initFrameBuffers(const Size& canvas_size) {
     for (uint32_t i = 0; i < m_num_buffers; i++) {
         Pass pass = {};
 
@@ -82,7 +81,7 @@ void TAAManager::initFrameBuffers(uint32_t width, uint32_t height) {
         glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, pass.frame_buffer));
 
         glBindTexture(GL_TEXTURE_2D, pass.color_texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(canvas_size.get_width()), static_cast<GLsizei>(canvas_size.get_height()), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pass.color_texture, 0);
@@ -93,7 +92,7 @@ void TAAManager::initFrameBuffers(uint32_t width, uint32_t height) {
         //glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, pass.color_render_buffer));
 
         glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, pass.depth_render_buffer));
-        glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
+        glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, static_cast<GLsizei>(canvas_size.get_width()), static_cast<GLsizei>(canvas_size.get_height())));
         glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pass.depth_render_buffer));
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -107,8 +106,8 @@ void TAAManager::initFrameBuffers(uint32_t width, uint32_t height) {
     }
 }
 
-void TAAManager::initGL(uint32_t width, uint32_t height) {
-    initFrameBuffers(width, height);
+void TAAManager::initGL(const Size& canvas_size) {
+    initFrameBuffers(canvas_size);
     initVertices();
 }
 
