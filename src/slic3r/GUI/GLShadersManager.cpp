@@ -102,6 +102,9 @@ std::pair<bool, std::string> GLShadersManager::init()
     else
         valid &= append_shader("mm_gouraud", { prefix + "mm_gouraud.vs", prefix + "mm_gouraud.fs" });
 
+    // TAA Shader
+    valid &= append_shader("taa", { prefix + "taa.vs", prefix + "taa.fs" });
+
     return { valid, error };
 }
 

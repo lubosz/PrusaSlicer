@@ -10,6 +10,7 @@ in vec2 tex_coord;
 
 out vec4 out_color;
 
+uniform sampler2D texture;
 
 void main()
 {

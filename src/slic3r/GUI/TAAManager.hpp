@@ -18,7 +18,8 @@ namespace GUI {
 struct Pass
 {
   GLuint frame_buffer;
-  GLuint color_render_buffer;
+  // GLuint color_render_buffer;
+  GLuint color_texture;
   GLuint depth_render_buffer;
 };
 
@@ -37,10 +38,11 @@ class TAAManager
     void shutdownGL();
     void initGL(uint32_t width, uint32_t height);
     void initFrameBuffers(uint32_t width, uint32_t height);
-    void initVertexBuffers();
+    void initVertices();
 
     bool m_gl_data_initialized = false;
     uint32_t m_num_buffers = 8;
+    GLuint m_plane_vertex_array, m_plane_vertex_buffer;
     std::vector<Pass> m_passes;
 };
 

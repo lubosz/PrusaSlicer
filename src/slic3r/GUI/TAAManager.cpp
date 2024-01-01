@@ -9,6 +9,8 @@
 #include <cstdio>
 
 #include "3DScene.hpp"
+#include "slic3r/GUI/GLShader.hpp"
+#include "slic3r/GUI/GUI_App.hpp"
 
 namespace Slic3r {
 namespace GUI {
@@ -54,11 +56,10 @@ void TAAManager::initVertices() {
          1.0f,  1.0f,  1.0f, 1.0f
     };
 
-    unsigned int vertex_array, vertex_buffer;
-    glGenVertexArrays(1, &vertex_array);
-    glGenBuffers(1, &vertex_buffer);
-    glBindVertexArray(vertex_array);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+    glGenVertexArrays(1, &m_plane_vertex_array);
+    glGenBuffers(1, &m_plane_vertex_buffer);
+    glBindVertexArray(m_plane_vertex_array);
+    glBindBuffer(GL_ARRAY_BUFFER, m_plane_vertex_buffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
@@ -74,13 +75,22 @@ void TAAManager::initFrameBuffers(uint32_t width, uint32_t height) {
         Pass pass = {};
 
         glsafe(::glGenFramebuffers(1, &pass.frame_buffer));
-        glsafe(::glGenRenderbuffers(1, &pass.color_render_buffer));
+        //glsafe(::glGenRenderbuffers(1, &pass.color_render_buffer));
+        glsafe(::glGenTextures(1, &pass.color_texture));
         glsafe(::glGenRenderbuffers(1, &pass.depth_render_buffer));
 
         glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, pass.frame_buffer));
-        glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, pass.color_render_buffer));
-        glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
-        glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, pass.color_render_buffer));
+
+        glBindTexture(GL_TEXTURE_2D, pass.color_texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pass.color_texture, 0);
+
+
+        //glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, pass.color_render_buffer));
+        //glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
+        //glsafe(::glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, pass.color_render_buffer));
 
         glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, pass.depth_render_buffer));
         glsafe(::glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, static_cast<GLsizei>(width), static_cast<GLsizei>(height)));
@@ -105,7 +115,8 @@ void TAAManager::shutdownGL() {
     printf("Shutting down TAAManager!\n");
     for (const Pass& pass : m_passes) {
         glsafe(::glDeleteRenderbuffers(1, &pass.depth_render_buffer));
-        glsafe(::glDeleteRenderbuffers(1, &pass.color_render_buffer));
+        glsafe(::glDeleteTextures(1, &pass.color_texture));
+        //glsafe(::glDeleteRenderbuffers(1, &pass.color_render_buffer));
         glsafe(::glDeleteFramebuffers(1, &pass.frame_buffer));
     }
     m_passes.clear();
@@ -119,10 +130,24 @@ void TAAManager::begin_frame() {
 void TAAManager::end_frame() {
     glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
     glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void TAAManager::display_frame() {
+    GLShaderProgram* shader = wxGetApp().get_shader("taa");
+    if (shader == nullptr)
+        return;
 
+    shader->start_using();
+    shader->set_uniform("texture", 0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_passes[0].color_texture);
+
+    glBindVertexArray(m_plane_vertex_array);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    shader->stop_using();
 }
 
 } // namespace GUI
