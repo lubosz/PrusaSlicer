@@ -21,7 +21,7 @@ struct Pass
 {
   GLuint frame_buffer;
   // GLuint color_render_buffer;
-  GLuint color_texture;
+  //GLuint color_texture;
   GLuint depth_render_buffer;
 };
 
@@ -46,6 +46,7 @@ class TAAManager
     uint32_t m_num_buffers = 8;
     GLuint m_plane_vertex_array, m_plane_vertex_buffer;
     std::vector<Pass> m_passes;
+    GLuint m_color_texture_array;
 };
 
 } // namespace GUI
