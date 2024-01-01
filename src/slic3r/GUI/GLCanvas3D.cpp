@@ -1943,12 +1943,13 @@ void GLCanvas3D::render()
 
     const bool is_looking_downward = camera.is_looking_downward();
 
-    // draw scene
-    // glsafe(::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    // debug_message("_render_background");
-    // _render_background();
+    glsafe(::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
     m_taa_manager.begin_frame();
+    // draw scene
+    debug_message("_render_background");
+    _render_background();
+
 
     debug_message("_render_objects");
     _render_objects(GLVolumeCollection::ERenderType::Opaque);
@@ -1998,10 +1999,6 @@ void GLCanvas3D::render()
 #endif // ENABLE_SHOW_CAMERA_TARGET
 
     m_taa_manager.end_frame();
-
-    glsafe(::glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    debug_message("_render_background");
-    _render_background();
 
     m_taa_manager.display_frame();
 

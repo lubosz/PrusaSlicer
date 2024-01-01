@@ -142,9 +142,6 @@ void TAAManager::display_frame() {
     if (shader == nullptr)
         return;
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     shader->start_using();
     shader->set_uniform("tex", 0);
 
@@ -155,8 +152,6 @@ void TAAManager::display_frame() {
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     shader->stop_using();
-
-    glDisable(GL_BLEND);
 }
 
 } // namespace GUI
