@@ -15,5 +15,5 @@ uniform sampler2DArray tex;
 void main()
 {
     //out_color = vec4(tex_coord, 0, 1);
-    out_color = texture(tex, tex_coord, 0);
+    out_color = texture(tex, vec3(tex_coord, 0));
 }

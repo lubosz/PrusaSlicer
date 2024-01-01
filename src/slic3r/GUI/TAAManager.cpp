@@ -75,7 +75,8 @@ void TAAManager::initFrameBuffers(const Size& canvas_size) {
                  static_cast<GLsizei>(canvas_size.get_width()),
                  static_cast<GLsizei>(canvas_size.get_height()),
                  m_num_buffers, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     for (uint32_t i = 0; i < m_num_buffers; i++) {
         Pass pass = {};
@@ -111,6 +112,7 @@ void TAAManager::initFrameBuffers(const Size& canvas_size) {
 
         glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
         glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
+        glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 
         m_passes.push_back(pass);
     }
@@ -144,7 +146,7 @@ void TAAManager::begin_frame() {
 void TAAManager::end_frame() {
     glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, 0));
     glsafe(::glBindRenderbuffer(GL_RENDERBUFFER, 0));
-    glBindTexture(GL_TEXTURE_2D, 0);
+
 }
 
 void TAAManager::display_frame() {
@@ -156,7 +158,7 @@ void TAAManager::display_frame() {
     shader->set_uniform("tex", 0);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_color_texture_array);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, m_color_texture_array);
 
     glBindVertexArray(m_plane_vertex_array);
     glDrawArrays(GL_TRIANGLES, 0, 6);
