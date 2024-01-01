@@ -126,6 +126,9 @@ void TAAManager::shutdownGL() {
 void TAAManager::begin_frame() {
     glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, m_passes[0].frame_buffer));
 
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 }
 
 void TAAManager::end_frame() {
@@ -139,8 +142,11 @@ void TAAManager::display_frame() {
     if (shader == nullptr)
         return;
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     shader->start_using();
-    shader->set_uniform("texture", 0);
+    shader->set_uniform("tex", 0);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_passes[0].color_texture);
@@ -149,6 +155,8 @@ void TAAManager::display_frame() {
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     shader->stop_using();
+
+    glDisable(GL_BLEND);
 }
 
 } // namespace GUI
