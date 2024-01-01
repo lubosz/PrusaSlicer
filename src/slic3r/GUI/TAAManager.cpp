@@ -27,7 +27,10 @@ void TAAManager::init()
     m_gl_data_initialized = true;
 }
 
-void TAAManager::initGL(uint32_t width, uint32_t height) {
+void TAAManager::initVertexBuffers() {
+}
+
+void TAAManager::initFrameBuffers(uint32_t width, uint32_t height) {
     for (uint32_t i = 0; i < m_num_buffers; i++) {
         Pass pass = {};
 
@@ -53,7 +56,10 @@ void TAAManager::initGL(uint32_t width, uint32_t height) {
 
         m_passes.push_back(pass);
     }
+}
 
+void TAAManager::initGL(uint32_t width, uint32_t height) {
+    initFrameBuffers(width, height);
 }
 
 void TAAManager::shutdownGL() {

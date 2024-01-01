@@ -36,6 +36,8 @@ class TAAManager
   private:
     void shutdownGL();
     void initGL(uint32_t width, uint32_t height);
+    void initFrameBuffers(uint32_t width, uint32_t height);
+    void initVertexBuffers();
 
     bool m_gl_data_initialized = false;
     uint32_t m_num_buffers = 8;
