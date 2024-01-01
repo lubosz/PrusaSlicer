@@ -27,7 +27,46 @@ void TAAManager::init()
     m_gl_data_initialized = true;
 }
 
-void TAAManager::initVertexBuffers() {
+// typedef struct
+// {
+//     float position[2];
+//     float uv[2];
+// } Vertex;
+
+
+void TAAManager::initVertices() {
+
+    // static const Vertex vertices[4] = {
+    //     {{-1.f, -1.f}, {1.f, 0.f}},
+    //     {{ 1.f, -1.f}, {0.f, 0.f}},
+    //     {{ 1.f,  1.f}, {0.f, 1.f}},
+    //     {{-1.f,  1.f}, {1.f, 1.f}}
+    // };
+
+    float vertices[] = {   // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+        // positions   // texCoords
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+
+    unsigned int vertex_array, vertex_buffer;
+    glGenVertexArrays(1, &vertex_array);
+    glGenBuffers(1, &vertex_buffer);
+    glBindVertexArray(vertex_array);
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+
+    glBindVertexArray(0);
+
 }
 
 void TAAManager::initFrameBuffers(uint32_t width, uint32_t height) {
