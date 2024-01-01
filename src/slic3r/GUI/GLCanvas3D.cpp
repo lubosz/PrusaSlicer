@@ -5612,6 +5612,8 @@ void GLCanvas3D::_resize(unsigned int w, unsigned int h)
     imgui->set_scaling(font_size, m_canvas->GetContentScaleFactor(), 1.0f);
 #endif
 
+    m_taa_manager.resize(w, h);
+
     this->request_extra_frame();
 
     // ensures that this canvas is current

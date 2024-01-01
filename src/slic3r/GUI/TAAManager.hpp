@@ -29,15 +29,16 @@ class TAAManager
 {
   public:
     TAAManager();
-    ~TAAManager() { shutdownGL(); }
+    ~TAAManager() { clearFrameBuffers(); }
 
     void init(const Size& canvas_size);
     void begin_frame();
     void end_frame();
     void display_frame();
+    void resize(unsigned int w, unsigned int h);
 
   private:
-    void shutdownGL();
+    void clearFrameBuffers();
     void initGL(const Size& canvas_size);
     void initFrameBuffers(const Size& canvas_size);
     void initVertices();

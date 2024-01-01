@@ -123,7 +123,7 @@ void TAAManager::initGL(const Size& canvas_size) {
     initVertices();
 }
 
-void TAAManager::shutdownGL() {
+void TAAManager::clearFrameBuffers() {
     printf("Shutting down TAAManager!\n");
     glsafe(::glDeleteTextures(1, &m_color_texture_array));
     for (const Pass& pass : m_passes) {
@@ -133,6 +133,12 @@ void TAAManager::shutdownGL() {
         glsafe(::glDeleteFramebuffers(1, &pass.frame_buffer));
     }
     m_passes.clear();
+}
+
+void TAAManager::resize(unsigned int w, unsigned int h) {
+    clearFrameBuffers();
+    Size size = {(int) w, (int) h};
+    initFrameBuffers(size);
 }
 
 void TAAManager::begin_frame() {
