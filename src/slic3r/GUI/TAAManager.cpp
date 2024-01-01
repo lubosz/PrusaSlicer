@@ -109,6 +109,7 @@ void TAAManager::initFrameBuffers(uint32_t width, uint32_t height) {
 
 void TAAManager::initGL(uint32_t width, uint32_t height) {
     initFrameBuffers(width, height);
+    initVertices();
 }
 
 void TAAManager::shutdownGL() {

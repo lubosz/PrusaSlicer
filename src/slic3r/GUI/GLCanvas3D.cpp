@@ -1999,6 +1999,8 @@ void GLCanvas3D::render()
 
     m_taa_manager.end_frame();
 
+    m_taa_manager.display_frame();
+
     if (m_picking_enabled && m_rectangle_selection.is_dragging())
         m_rectangle_selection.render(*this);
 
