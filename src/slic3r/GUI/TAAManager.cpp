@@ -142,6 +142,7 @@ void TAAManager::resize(unsigned int w, unsigned int h) {
 }
 
 void TAAManager::begin_frame() {
+    printf("Rendering frame...\n");
     glsafe(::glBindFramebuffer(GL_FRAMEBUFFER, m_passes[0].frame_buffer));
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
